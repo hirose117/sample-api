@@ -1,9 +1,7 @@
 package com.example.sampleapi.auth;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(decodedKey);
     }
 
-    // JWT トークンを生成するメソッド
+    // JWTトークンを生成するメソッド
     public String generateToken(String username) {
         return Jwts.builder()
                 .subject(username)
@@ -36,7 +34,7 @@ public class JwtService {
                 .compact();
     }
 
-    // JWT　トークンをパースしてクレームを取得
+    // JWT トークンをパースしてクレームを取得
     private Claims getClaimsFromToken(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
@@ -55,14 +53,14 @@ public class JwtService {
         return getClaimsFromToken(token).getExpiration();
     }
 
-    // JWT トークンの有効期限をチェック
+    // トークンの有効期限をチェック
     public Boolean isTokenExpired(String token) {
-        Date expiration = getExpirationDateFromToken(token);
+        Date expiration =  getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
     // トークンの検証
-    public  Boolean validateToken(String token, String username) {
+    public Boolean validateToken(String token, String username) {
         String tokenUsername = getUsernameFromToken(token);
         return (tokenUsername.equals(username) && !isTokenExpired(token));
     }
